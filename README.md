@@ -8,6 +8,7 @@
   ![alt text](image.png)
   ![alt text](image-3.png)
 - Đối với việc tích hợp chúng tôi sau khi đăng kí thành công website của bạn vào hệ thống sẽ cũng cung cấp cho bạn 1 key
+
   Example:
 
   ```javascript
@@ -16,7 +17,9 @@
 
 - Khi người dùng click vào nút đăng nhập bằng DLAUTH bạn cần chuyển hướng người dùng đến trang đăng nhập của DLAUTH của owner bạn đã đăng ký với tham số API_KEY
   **Lưu ý:** Chúng tôi khuyến khích bạn tạo nó theo dạng popup để người dùng không cần phải rời khỏi trang hiện tại
+
   Example:
+
   ```javascript
   const url = `https://dlauth.com/login3rd?api_key=${API_KEY}&base_url=${window.location.href}`
   ```
