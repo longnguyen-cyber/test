@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="h-screen flex items-center justify-center bg-gray-100">
+  <div class="max-w-sm w-full bg-white shadow-md rounded-md p-6">
+    <h2 class="text-2xl font-bold text-center mb-2">Login</h2>
+    <p class="text-center text-gray-500 mb-6">
+      Enter your email and password to login to your account
+    </p>
+    <form id="login-form" class="space-y-4">
+      <div>
+        <label for="username" class="block text-sm font-medium text-gray-700">User Name</label>
+        <input
+          id="username"
+          name="username"
+          type="text"
+          required
+          placeholder="John Doe"
+          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+        />
+      </div>
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+        <input
+          id="password"
+          name="password"
+          type="password"
+          required
+          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+        />
+      </div>
+      <button
+        type="submit"
+        class="w-full bg-black text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+      >
+        Login
+      </button>
+      <div class="relative my-4">
+        <div class="absolute inset-0 flex items-center">
+          <div class="w-full border-t border-gray-300"></div>
+        </div>
+        <div class="relative flex justify-center text-sm">
+          <span class="bg-white px-2 text-gray-500">Or</span>
+        </div>
+      </div>
+      <button
+        type="button"
+        id="login-with-popup"
+        class="w-full bg-black text-white py-2 px-4 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300"
+      >
+        Login with DLAuth
+      </button>
+      <p class="text-center text-sm text-gray-600">
+        Don't have an account? <a href="/register" class="text-indigo-600 italic">Register</a>
+      </p>
+    </form>
+  </div>
+
+  <script>
+    const PATHS = {
+      HOME: "/",
+    };
+
+    let login = {
+      username: "",
+      password: "",
+    };
+
+    // Xử lý thay đổi input
+    function handleChangeInput(e) {
+      login = {
+        ...login,
+        [e.target.name]: e.target.value,
+      };
+    }
+
+    // Xử lý form submit
+    async function handleSubmit(e) {
+      e.preventDefault();
+      try {
+        const response = await fetch("https://your-api-endpoint/login", { // Thay bằng endpoint API thực tế
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(login),
+        });
+        const data = await response.json();
+        if (response.status === 200) {
+          localStorage.setItem("access_token", data.token);
+          window.location.href = PATHS.HOME;
+        } else {
+          console.error("Login failed:", data.message);
+        }
+      } catch (error) {
+        console.error("Login error:", error);
+      }
+    }
+
+    // Mở popup login với DLAuth
+    function openLoginPopup() {
+      const API_KEY = "9a2153dc-5e96-4119-96a3-7919a6037763";
+      const baseUrl = `${window.location.protocol}//${window.location.host}`;
+      const url3Rd = "http://localhost:5173";
+      const loginUrl = `http://localhost:5173/login3rd?api_key=${API_KEY}&base_url=${encodeURIComponent(
+        baseUrl
+      )}`;
+
+      const width = 500;
+      const height = 600;
+      const left = window.screen.width / 2 - width / 2;
+      const top = window.screen.height / 2 - height / 2;
+
+      const loginPopup = window.open(
+        loginUrl,
+        "Login",
+        `width=${width},height=${height},top=${top},left=${left}`
+      );
+
+      // Lắng nghe kết quả từ popup
+      window.addEventListener("message", (event) => {
+        if (event.origin === url3Rd) {
+          const { token } = event.data;
+          localStorage.setItem("access_token", token);
+          window.location.href = PATHS.HOME;
+        }
+      });
+    }
+
+    // Gắn sự kiện DOM
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.querySelector("#login-form");
+      const inputs = document.querySelectorAll("#login-form input");
+      const loginWithPopupBtn = document.querySelector("#login-with-popup");
+
+      // Gắn sự kiện thay đổi input
+      inputs.forEach((input) => {
+        input.addEventListener("input", handleChangeInput);
+      });
+
+      // Gắn sự kiện submit form
+      form.addEventListener("submit", handleSubmit);
+
+      // Gắn sự kiện nút "Login with DLAuth"
+      loginWithPopupBtn.addEventListener("click", openLoginPopup);
+    });
+  </script>
+</body>
+</html>
