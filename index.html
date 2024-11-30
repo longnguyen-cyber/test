@@ -13,10 +13,6 @@
       You are successfully logged in!
     </p>
 
-
-    <p>Quy trình tích hợp dlauth vào website của bạn</p>
-    <span>Điều kiện: Đã được add bởi 1 trong các owner của DLAUTH</span>
-
     <div id="data-container" class="space-y-4">
       <div id="loading" class="text-center text-gray-500">Loading data...</div>
       <!-- Data will be dynamically appended here -->
@@ -38,9 +34,9 @@
     // Kiểm tra token
     function checkAuth() {
       const token = localStorage.getItem("access_token");
-      // if (!token) {
-      //   window.location.href = PATHS.LOGIN; // Chuyển về trang login nếu chưa đăng nhập
-      // }
+      if (!token) {
+        window.location.href = PATHS.LOGIN; // Chuyển về trang login nếu chưa đăng nhập
+      }
     }
 
     // Fetch dữ liệu từ API
