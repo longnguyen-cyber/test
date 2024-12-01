@@ -36,9 +36,9 @@
     // Kiểm tra token
     function checkAuth() {
       const token = localStorage.getItem("access_token");
-      // if (!token) {
-      //   window.location.href = PATHS.LOGIN; // Chuyển về trang login nếu chưa đăng nhập
-      // }
+      if (!token) {
+        window.location.href = PATHS.LOGIN; // Chuyển về trang login nếu chưa đăng nhập
+      }
     }
 
     // Fetch dữ liệu từ API
