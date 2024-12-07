@@ -49,9 +49,10 @@
 
       try {
         const response = await fetch(API_URL, {
-          method: "GET",
+          method: "POST",
           headers: {
             Authorization: `Bearer ${token}`, // Đính kèm token trong header
+            api_key:"5f12ec25f83ef1c72fe16dca0f260f255f58567f08098d582ef2a02b6806c0f4"
           },
         });
 
